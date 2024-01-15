@@ -1,6 +1,9 @@
-const fs = require("fs");
-const path = require('path');
 const inquirer = require("inquirer");
+const util = require('util') 
+const fs = require("fs");
+const writeFilePromise = util.promisify (fs.writeFile);
+
+
 const generateMarkdown = require("./utils/generateMarkdown");
 
 // array of questions for user
@@ -23,14 +26,18 @@ const questions = [
     },
     {
         type: "input",
-        name: "description",
+        name: "usage",
         message: "Project usage (input examples of how your project can be used)"
     },
     {
         type: "list",
         name: "license",
         message: "project license (choose from the list the license that this project is distributed under)",
-        choices: ["Apache license 2.0", "Boost Software License 1.0", "Creative Commons license family", "Eclipse Public License 1.0", "ISC", "MIT"]
+        choices: ["Apache license 2.0", "Boost Software License 1.0", "Eclipse Public License 1.0", "ISC", "MIT", "Mozilla Public License 2.0"],
+        filter(value) {
+            const newValue = value.replace(" ", "").replace(/[^a-zA-Z0-9]/g, "").toLowerCase()
+            return newValue
+        }
     },
     {
         type: "input",
@@ -55,13 +62,12 @@ const questions = [
 
 ];
 
-// function to write README file
-function writeToFile(fileName, data) {
-}
 
 // function to initialize program
-function init() {
-
+const init = () => {
+return inquirer.prompt(questions).then((answers) => {
+writeFilePromise("readmesample6.md", generateMarkdown(answers))
+}).catch(err => console.log(err))
 }
 
 // function call to initialize program
