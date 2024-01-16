@@ -1,7 +1,6 @@
 const inquirer = require("inquirer");
-// const util = require('util') 
 const fs = require("fs");
-// const writeFilePromise = util.promisify (fs.writeFile);
+
 
 
 const generateMarkdown = require("./utils/generateMarkdown");
@@ -66,7 +65,7 @@ const questions = [
 // function to initialize program
 const init = () => {
 return inquirer.prompt(questions).then((answers) => {
-fs.writeFile("README3.md", generateMarkdown(answers), (error) =>
+fs.writeFile("README.md", generateMarkdown(answers), (error) =>
 error ? console.error(error) : console.log("Success! New README file has been generated"))
 }).catch(err => console.log(err))
 }
